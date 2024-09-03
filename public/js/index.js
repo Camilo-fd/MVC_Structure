@@ -1,6 +1,42 @@
 document.addEventListener('DOMContentLoaded', () => {
+    let currentForm = null; // Para rastrear el formulario actualmente visible
+
+    // Manejo de los botones del menú
+    document.querySelectorAll('.menu-button').forEach(button => {
+        button.addEventListener('click', () => {
+            const formToShow = button.getAttribute('data-form');
+            if (currentForm === formToShow) {
+                // Si el formulario ya está visible, ocultarlo
+                ocultarFormulario();
+                currentForm = null;
+            } else {
+                // Mostrar el formulario seleccionado y ocultar los demás
+                mostrarFormulario(formToShow);
+                currentForm = formToShow;
+            }
+        });
+    });
+
+    function mostrarFormulario(formId) {
+        document.querySelectorAll('.form-section').forEach(section => {
+            if (section.id === formId) {
+                section.style.display = 'block';
+            } else {
+                section.style.display = 'none';
+            }
+        });
+        document.getElementById('response').style.display = 'none'; // Ocultar respuestas
+    }
+
+    function ocultarFormulario() {
+        document.querySelectorAll('.form-section').forEach(section => {
+            section.style.display = 'none';
+        });
+        document.getElementById('response').style.display = 'none'; // Ocultar respuestas
+    }
+
     // Manejar la creación de usuario
-    document.getElementById('userForm').addEventListener('submit', async (event) => {
+    document.getElementById('createUserForm').addEventListener('submit', async (event) => {
         event.preventDefault();
         
         const formData = new FormData(event.target);
@@ -28,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Manejar la búsqueda de usuario
-    document.getElementById('searchForm').addEventListener('submit', async (event) => {
+    document.getElementById('searchUserForm').addEventListener('submit', async (event) => {
         event.preventDefault();
         
         const userId = document.getElementById('searchId').value;
@@ -48,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Manejar la actualización de usuario
-    document.getElementById('updateForm').addEventListener('submit', async (event) => {
+    document.getElementById('updateUserForm').addEventListener('submit', async (event) => {
         event.preventDefault();
         
         const userId = document.getElementById('updateId').value;
@@ -81,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Manejar la eliminación de usuario
-    document.getElementById('deleteForm').addEventListener('submit', async (event) => {
+    document.getElementById('deleteUserForm').addEventListener('submit', async (event) => {
         event.preventDefault();
         
         const userId = document.getElementById('deleteId').value;
@@ -107,6 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const responseDiv = document.getElementById('response');
         
         responseDiv.className = 'success';
+        responseDiv.style.display = 'block';
         responseDiv.innerHTML = `
             <h2>Datos del Usuario</h2>
             <p><strong>ID:</strong> ${usuario._id || 'No disponible'}</p>
@@ -121,6 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const responseDiv = document.getElementById('response');
         
         responseDiv.className = 'error';
+        responseDiv.style.display = 'block';
         responseDiv.innerHTML = `
             <h2>Error</h2>
             <p>${mensaje}</p>
