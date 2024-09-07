@@ -41,22 +41,40 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const formData = new FormData(event.target);
         const data = Object.fromEntries(formData.entries());
-        
+
         try {
-            const response = await fetch('/api/users/create', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
+            // Ejecutar ambas solicitudes en paralelo
+            const [sqliteResponse, mongoResponse] = await Promise.all([
+                fetch('/api/users/sqlite/create', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                }),
+                fetch('/api/users/create', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+            ]);
             
-            const result = await response.json();
-            
-            if (response.ok) {
-                mostrarDatosUsuario(result.user);
+            // Manejar la respuesta de SQLite
+            const sqliteResult = await sqliteResponse.json();
+            if (sqliteResponse.ok) {
+                mostrarDatosUsuario(sqliteResult.user);
             } else {
-                mostrarError(result.message || 'Ocurrió un error');
+                mostrarError(sqliteResult.message || 'Ocurrió un error con SQLite');
+            }
+
+            // Manejar la respuesta de MongoDB
+            const mongoResult = await mongoResponse.json();
+            if (mongoResponse.ok) {
+                mostrarDatosUsuario(mongoResult.user);
+            } else {
+                mostrarError(mongoResult.message || 'Ocurrió un error con MongoDB');
             }
         } catch (error) {
             mostrarError('Se produjo un error inesperado. Por favor, inténtalo de nuevo.');
@@ -96,21 +114,35 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         
         try {
-            const response = await fetch(`/api/users/${userId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(updatedData)
-            });
-            
-            const result = await response.json();
-            
-            if (response.ok) {
-                mostrarDatosUsuario(result.user);
-            } else {
-                mostrarError(result.message || 'Ocurrió un error');
-            }
+            // // Ejecutar ambas solicitudes en paralelo
+            // const [sqliteResponse, mongoResponse] = await Promise.all([
+            //     fetch(`/api/users/sqlite/${userId}`, {
+            //         method: 'PUT',
+            //         headers: {
+            //             'Content-Type': 'application/json'
+            //         },
+            //         body: JSON.stringify(updatedData)
+            //     }),
+            //     fetch(`/api/users/${userId}`, {
+            //         method: 'PUT',
+            //         headers: {
+            //             'Content-Type': 'application/json'
+            //         },
+            //         body: JSON.stringify(updatedData)
+            //     })
+            // ]);
+
+            // // Manejar la respuesta de SQLite
+            // const sqliteResult = await sqliteResponse.json();
+            // if (!sqliteResponse.ok) mostrarError(sqliteResult.message || 'Ocurrió un error con SQLite');
+
+            // // Manejar la respuesta de MongoDB
+            // const mongoResult = await mongoResponse.json();
+            // if (mongoResponse.ok) {
+            //     mostrarDatosUsuario(mongoResult.user);
+            // } else {
+            //     mostrarError(mongoResult.message || 'Ocurrió un error con MongoDB');
+            // }
         } catch (error) {
             mostrarError('Se produjo un error inesperado. Por favor, inténtalo de nuevo.');
         }
