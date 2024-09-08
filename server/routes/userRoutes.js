@@ -15,8 +15,10 @@ router.put('/:id', userValidationRules(), validate, updateUser);
 // Eliminar un usuario por ID
 router.delete('/:id', deleteUser);
 
-router.post('/sqlite/create', createUserSQLite);
+// Crear un usuario Sqlite
+// router.post('/sqlite/create', createUserSQLite);
 
-// router.post('/sqlite/:id', updateUserSQLite);
+// Actualizar un usuario Sqlite
+router.put('/sqlite/:id', updateUserSQLite);
 
 module.exports = router;

@@ -43,38 +43,20 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = Object.fromEntries(formData.entries());
 
         try {
-            // Ejecutar ambas solicitudes en paralelo
-            const [sqliteResponse, mongoResponse] = await Promise.all([
-                fetch('/api/users/sqlite/create', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                }),
-                fetch('/api/users/create', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                })
-            ]);
+            const response = await fetch('/api/users/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
             
-            // Manejar la respuesta de SQLite
-            const sqliteResult = await sqliteResponse.json();
-            if (sqliteResponse.ok) {
-                mostrarDatosUsuario(sqliteResult.user);
+            const result = await response.json();
+            
+            if (response.ok) {
+                mostrarDatosUsuario(result.user);
             } else {
-                mostrarError(sqliteResult.message || 'Ocurrió un error con SQLite');
-            }
-
-            // Manejar la respuesta de MongoDB
-            const mongoResult = await mongoResponse.json();
-            if (mongoResponse.ok) {
-                mostrarDatosUsuario(mongoResult.user);
-            } else {
-                mostrarError(mongoResult.message || 'Ocurrió un error con MongoDB');
+                mostrarError(result.message || 'Ocurrió un error');
             }
         } catch (error) {
             mostrarError('Se produjo un error inesperado. Por favor, inténtalo de nuevo.');
@@ -114,38 +96,36 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         
         try {
-            // // Ejecutar ambas solicitudes en paralelo
-            // const [sqliteResponse, mongoResponse] = await Promise.all([
-            //     fetch(`/api/users/sqlite/${userId}`, {
-            //         method: 'PUT',
-            //         headers: {
-            //             'Content-Type': 'application/json'
-            //         },
-            //         body: JSON.stringify(updatedData)
-            //     }),
-            //     fetch(`/api/users/${userId}`, {
-            //         method: 'PUT',
-            //         headers: {
-            //             'Content-Type': 'application/json'
-            //         },
-            //         body: JSON.stringify(updatedData)
-            //     })
-            // ]);
-
-            // // Manejar la respuesta de SQLite
-            // const sqliteResult = await sqliteResponse.json();
-            // if (!sqliteResponse.ok) mostrarError(sqliteResult.message || 'Ocurrió un error con SQLite');
-
-            // // Manejar la respuesta de MongoDB
-            // const mongoResult = await mongoResponse.json();
-            // if (mongoResponse.ok) {
-            //     mostrarDatosUsuario(mongoResult.user);
-            // } else {
-            //     mostrarError(mongoResult.message || 'Ocurrió un error con MongoDB');
-            // }
+            const [sqliteResponse, mongoResponse] = await Promise.all([
+                fetch(`/api/users/sqlite/${userId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updatedData)
+                }),
+                fetch(`/api/users/${userId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updatedData)
+                })
+            ]);
+        
+            const sqliteResult = await sqliteResponse.json();
+            const mongoResult = await mongoResponse.json();
+        
+            if (sqliteResponse.ok && mongoResponse.ok) {
+                mostrarDatosUsuario(mongoResult.user);
+            } else {
+                mostrarError(
+                    `SQLite: ${sqliteResult.message || 'Error en SQLite'}, MongoDB: ${mongoResult.message || 'Error en MongoDB'}`
+                );
+            }
         } catch (error) {
             mostrarError('Se produjo un error inesperado. Por favor, inténtalo de nuevo.');
-        }
+        }        
     });
 
     // Manejar la eliminación de usuario

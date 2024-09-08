@@ -16,13 +16,10 @@ body {
 }
 
 .form-section {
-    border: 5px solid transparent; /* Color y grosor del borde */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Sombra */
-    /* Puedes ajustar el color, tamaño y difuminado de la sombra según lo desees */
-    background-color: #fff; /* Fondo blanco para mejor contraste */
+    border: 5px solid transparent; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); 
+    background-color: #fff;
     padding: 1rem;
-    position: relative; 
-    top: 2rem;
 }
 
 .container {
@@ -31,9 +28,11 @@ body {
     background-color: #ffffff;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 2rem;
+    padding: 3rem;
+    gap: 2rem;
     max-width: 400px;
     width: 100%;
+    height: auto;
 }
 
 h1 {
