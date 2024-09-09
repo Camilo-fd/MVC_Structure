@@ -25,17 +25,6 @@ exports.createUser = async (req, res) => {
     }
   };
 
-// exports.createUser = async (req, res) => {
-//     try {
-//         const userDTO = new UserDTO(req.body);
-//         const user = new User(userDTO);
-//         await user.save();
-//         res.status(201).json({ message: 'Usuario creado con éxito', user });
-//     } catch (error) {
-//         res.status(500).json({ message: 'Error creando el usuario', error });
-//     }
-// };
-
 exports.getUser = async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
@@ -49,14 +38,35 @@ exports.getUser = async (req, res) => {
 };
 
 exports.updateUser = async (req, res) => {
+    const { id } = req.params;
+    const { name, surname, age, email } = req.body;
+
     try {
-        const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
-        if (!user) {
-            return res.status(404).json({ message: 'Usuario no encontrado' });
+        // Actualización en MongoDB
+        const mongoUser = await User.findByIdAndUpdate(id, req.body, { new: true, runValidators: true });
+        if (!mongoUser) {
+            return res.status(404).json({ message: 'Usuario no encontrado en MongoDB' });
         }
-        res.status(200).json({ message: 'Usuario actualizado con éxito', user });
+
+        // Actualización en SQLite/MySQL
+        const [updated] = await MySQLUser.update(
+            { name, surname, age, email },
+            { where: { mongo_id: id } } // Asegúrate de que mongo_id sea el campo correcto
+        );
+
+        if (updated) {
+            // Obtener el usuario actualizado en SQLite/MySQL
+            const updatedUser = await MySQLUser.findOne({ where: { mongo_id: id } });
+
+            // Responder con el éxito en ambas actualizaciones
+            return res.status(200).json({ message: 'Usuario actualizado con éxito en MongoDB y SQLite/MySQL', mongoUser, updatedUser });
+        } else {
+            // No se encontró el usuario para actualizar en SQLite/MySQL
+            return res.status(404).json({ message: 'Usuario no encontrado en SQLite/MySQL' });
+        }
     } catch (error) {
-        res.status(500).json({ message: 'Error al actualizar el usuario', error });
+        console.error('Error al actualizar el usuario en MongoDB o SQLite/MySQL:', error.message);
+        return res.status(500).json({ message: 'Error al actualizar el usuario en MongoDB o SQLite/MySQL', error: error.message });
     }
 };
 
@@ -69,43 +79,5 @@ exports.deleteUser = async (req, res) => {
         res.status(200).json({ message: 'Usuario eliminado con éxito' });
     } catch (error) {
         res.status(500).json({ message: 'Error al eliminar el usuario', error });
-    }
-};
-
-// exports.createUserSQLite = (req, res) => {
-//     const { name, surname, age, email } = req.body;
-//     const query = `INSERT INTO Users (name, surname, age, email) VALUES (?, ?, ?, ?)`;
-
-//     Sqlite.run(query, [name, surname, age, email], function (err) {
-//         if (err) {
-//             console.error('Error al crear el usuario en SQLite:', err.message);
-//             return res.status(500).json({ message: 'Error al crear el usuario en SQLite', error: err.message });
-//         }
-//         res.status(201).json({ message: 'Usuario creado con éxito en SQLite', user: { id: this.lastID, name, surname, age, email } });
-//     });
-// };
-
-exports.updateUserSQLite = async (req, res) => {
-    const { id } = req.params;
-    const { name, surname, age, email } = req.body;
-
-    try {
-        // Actualizar el usuario usando Sequelize
-        const [updated] = await MySQLUser.update(
-            { name, surname, age, email },
-            { where: { mongo_id: id } }
-        );
-
-        if (updated) {
-            // Obtener el usuario actualizado para enviar la respuesta
-            const updatedUser = await MySQLUser.findOne({ where: { mongo_id: id } });
-            // return res.status(200).json({ message: 'Usuario actualizado con éxito en SQLite', user: updatedUser });
-        } else {
-            // No se encontró el usuario para actualizar
-            return res.status(404).json({ message: 'Usuario no encontrado en SQLite' });
-        }
-    } catch (error) {
-        console.error('Error al actualizar el usuario en SQLite:', error.message);
-        return res.status(500).json({ message: 'Error al actualizar el usuario en SQLite', error: error.message });
     }
 };

@@ -95,35 +95,21 @@ document.addEventListener('DOMContentLoaded', () => {
             email: document.getElementById('updateEmail').value
         };
         
-        console.log("afuera");
         try {
-            const [sqliteResponse, mongoResponse] = await Promise.all([
-                fetch(`/api/users/sqlite/${userId}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(updatedData)
-                }),
-                fetch(`/api/users/${userId}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(updatedData)
-                })
-            ]);
+            const response = await fetch(`/api/users/update/${userId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatedData)
+            });
+            
+            const result = await response.json();
         
-            const sqliteResult = await sqliteResponse.json();
-            const mongoResult = await mongoResponse.json();
-        
-            console.log("adentro");
-            if (sqliteResponse.ok && mongoResponse.ok) {
-                mostrarDatosUsuario(mongoResult.user);
+            if (result) {
+                mostrarDatosUsuario(result.mongoUser);
             } else {
-                mostrarError(
-                    `SQLite: ${sqliteResult.message || 'Error en SQLite'}, MongoDB: ${mongoResult.message || 'Error en MongoDB'}`
-                );
+                mostrarError(`MongoDB: ${result.message || 'Error en MongoDB'}`);
             }
         } catch (error) {
             mostrarError('Se produjo un error inesperado. Por favor, inténtalo de nuevo.');

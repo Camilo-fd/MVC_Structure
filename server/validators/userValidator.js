@@ -17,3 +17,10 @@ exports.validate = (req, res, next) => {
     next();
 };
 
+// CREACION PARA JWT
+exports.singUp = () => {
+    return [
+        body('name').isString().notEmpty().withMessage('Nombre es requerido'),
+        body('password').isString().notEmpty().withMessage('Contraseña es requerida'),
+    ]
+}
