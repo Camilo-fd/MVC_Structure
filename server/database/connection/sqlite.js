@@ -1,17 +1,11 @@
-const sqlite3 = require('sqlite3').verbose();
-const path = require('path');
+const { Sequelize } = require('sequelize');
 
-// Ruta correcta a la base de datos
-const dbPath = path.resolve(__dirname, 'C:/Users/Camilo/Documents/Campus/Sqlite/miBase.db');
-
-// Crear una nueva instancia de la base de datos
-const db = new sqlite3.Database(dbPath, (err) => {
-  if (err) {
-    console.error('Error al conectar con SQLite:', err.message);
-    return;
-  }
-  console.log('Conexión exitosa a la base de datos SQLite.');
-});
-
-// Exportar la conexión a la base de datos
-module.exports = db;
+try {
+  const sequelize = new Sequelize('mysql://root:VoeiKVFTcbdRlkEoUPQiLpHHFtqfyBwe@autorack.proxy.rlwy.net:16987/Camilo', {
+    logging: false // Desactiva el logging de SQL
+  });
+  module.exports = sequelize;
+} catch (error) {
+  console.error('Error al conectar a la base de datos:', error);
+  process.exit(1); // Cierra el proceso con un código de error
+}

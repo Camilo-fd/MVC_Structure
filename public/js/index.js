@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const result = await response.json();
             
             if (response.ok) {
-                mostrarDatosUsuario(result.user);
+                mostrarDatosUsuario(result.mongoUser);
             } else {
                 mostrarError(result.message || 'Ocurrió un error');
             }
@@ -95,6 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
             email: document.getElementById('updateEmail').value
         };
         
+        console.log("afuera");
         try {
             const [sqliteResponse, mongoResponse] = await Promise.all([
                 fetch(`/api/users/sqlite/${userId}`, {
@@ -116,6 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const sqliteResult = await sqliteResponse.json();
             const mongoResult = await mongoResponse.json();
         
+            console.log("adentro");
             if (sqliteResponse.ok && mongoResponse.ok) {
                 mostrarDatosUsuario(mongoResult.user);
             } else {
