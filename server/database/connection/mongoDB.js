@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 // const DB_URI = 'mongodb+srv://camiloandresfrancoduran:1095791057@atlascluster.awgtpav.mongodb.net/CineCampus';
-const DB_URI = 'mongodb://admin:123456@autorack.proxy.rlwy.net:20168/CineCampus';
+const DB_URI = 'mongodb://admin:123456@viaduct.proxy.rlwy.net:47991/CamiloDb';
 
 const connectDB = async () => {
   try {

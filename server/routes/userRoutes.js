@@ -19,6 +19,6 @@ router.delete('/:id', deleteUser);
 //TODO: JWT!
 router.post('/login', login);
 
-router.post('/signup', signup);
+router.post('/signup', singUp(), validate, signup);
 
 module.exports = router;

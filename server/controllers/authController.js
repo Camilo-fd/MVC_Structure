@@ -1,8 +1,5 @@
-//TODO: JWT!
-
 const jwt = require('jsonwebtoken');
-const MongoUser = require('../models/userModel');
-const MySQLUser = require('../models/SQL');
+const { MongoUser, MySQLUser } = require('../models/JWT');
 const config = require('../../config');
 
 exports.login = async (req, res) => {
@@ -11,7 +8,6 @@ exports.login = async (req, res) => {
     
     // Buscar usuario en MongoDB
     const mongoUser = await MongoUser.findOne({ name: name });
-    console.log("User: ", mongoUser);
     if (!mongoUser) {
       return res.status(404).send({ message: "Usuario no encontrado." });
     }
@@ -39,13 +35,21 @@ exports.login = async (req, res) => {
   }
 };
 
-// Ejemplo de cómo manejar el registro (signup) con ambas bases de datos
 exports.signup = async (req, res) => {
   try {
     const { name, password } = req.body;
 
-    // Crear usuario en MongoDB
-    const mongoUser = new MongoUser({ name, password });
+    // Verifica si el nombre o la contraseña están vacíos
+    if (!name || !password) {
+      return res.status(400).json({ message: 'Nombre y contraseña son requeridos.' });
+    }
+
+    // Crear usuario en MongoDB con campos opcionales
+    const mongoUser = new MongoUser({
+      name,
+      password,
+    });
+
     await mongoUser.save();
 
     // Crear usuario en MySQL
@@ -60,4 +64,4 @@ exports.signup = async (req, res) => {
     console.error('Error al crear el usuario:', error);
     res.status(500).json({ message: 'Error al crear el usuario' });
   }
-};
+};    
