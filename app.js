@@ -1,6 +1,6 @@
 const express = require('express');
 const connectDB = require('./server/database/connection/mongoDB');
-const connectSQL = require('./server/database/connection/sqlite')
+const connectSQL = require('./server/database/connection/sql')
 const userRoutes = require('./server/routes/userRoutes');   
 const path = require('path');
 require('dotenv').config();
@@ -15,15 +15,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Rutas
 app.use('/api/users', userRoutes);
+app.get("/menu", (req, res) => {
+  res.sendFile(`public/views/menu.html`, {root: __dirname})
+})
 
-// Iniciar el servidor
 const startServer = async () => {
   try {
     // Conectar a MongoDB
     await connectDB();
     console.log('Conexión exitosa a MongoDB');
 
-    // Conectar a SQLite (usando Sequelize)
+    // Conectar a SQL
     await connectSQL.sync();  // sync() asegura que las tablas existan
     console.log('Conexión exitosa a SQLite/Sequelize');
 
@@ -38,5 +40,4 @@ const startServer = async () => {
   }
 };
 
-// Llamar a la función para iniciar el servidor
 startServer();

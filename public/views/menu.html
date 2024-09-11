@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Usuarios</title>
+    <link rel="stylesheet" href="../css/menu.css">
+    <script defer src="../js/menu.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Gestión de Usuarios</h1>
+
+        <!-- Menú de opciones -->
+        <div class="menu" id="menu">
+            <button class="menu-button" data-form="createForm">Crear Usuario</button>
+            <button class="menu-button" data-form="searchForm">Buscar Usuario</button>
+            <button class="menu-button" data-form="updateForm">Actualizar Usuario</button>
+            <button class="menu-button" data-form="deleteForm">Eliminar Usuario</button>
+        </div>
+
+        <!-- Formularios -->
+        <div id="createForm" class="form-section" style="display: none;">
+            <h2>Crear Usuario</h2>
+            <form id="createUserForm">
+                <div class="form-group">
+                    <label for="name">Nombre:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="surname">Apellido:</label>
+                    <input type="text" id="surname" name="surname" required>
+                </div>
+                <div class="form-group">
+                    <label for="age">Edad:</label>
+                    <input type="number" id="age" name="age" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <button type="submit">Crear Usuario</button>
+            </form>
+        </div>
+
+        <div id="searchForm" class="form-section" style="display: none;">
+            <h2>Buscar Usuario</h2>
+            <form id="searchUserForm">
+                <div class="form-group">
+                    <label for="searchId">ID del Usuario:</label>
+                    <input type="text" id="searchId" required>
+                </div>
+                <button type="submit">Buscar Usuario</button>
+            </form>
+        </div>
+
+        <div id="updateForm" class="form-section" style="display: none;">
+            <h2>Actualizar Usuario</h2>
+            <form id="updateUserForm">
+                <div class="form-group">
+                    <label for="updateId">ID del Usuario:</label>
+                    <input type="text" id="updateId" required>
+                </div>
+                <div class="form-group">
+                    <label for="updateName">Nombre:</label>
+                    <input type="text" id="updateName">
+                </div>
+                <div class="form-group">
+                    <label for="updateSurname">Apellido:</label>
+                    <input type="text" id="updateSurname">
+                </div>
+                <div class="form-group">
+                    <label for="updateAge">Edad:</label>
+                    <input type="number" id="updateAge">
+                </div>
+                <div class="form-group">
+                    <label for="updateEmail">Email:</label>
+                    <input type="email" id="updateEmail">
+                </div>
+                <button type="submit">Actualizar Usuario</button>
+            </form>
+        </div>
+
+        <div id="deleteForm" class="form-section" style="display: none;">
+            <h2>Eliminar Usuario</h2>
+            <form id="deleteUserForm">
+                <div class="form-group">
+                    <label for="deleteId">ID del Usuario:</label>
+                    <input type="text" id="deleteId" required>
+                </div>
+                <button type="submit">Eliminar Usuario</button>
+            </form>
+        </div>
+
+        <!-- Sección para mostrar respuestas o errores -->
+        <div id="response" style="display: none;"></div>
+    </div>
+</body>
+</html>

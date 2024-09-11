@@ -1,7 +1,7 @@
 const { Sequelize } = require('sequelize');
 
 try {
-  const sequelize = new Sequelize('mysql://root:VoeiKVFTcbdRlkEoUPQiLpHHFtqfyBwe@autorack.proxy.rlwy.net:16987/Camilo', {
+  const sequelize = new Sequelize('mysql://root:EcbrxxKTGtwLiPLIokFaKTLwFEmEGjbi@autorack.proxy.rlwy.net:41350/Camilo', {
     logging: false // Desactiva el logging de SQL
   });
   module.exports = sequelize;
