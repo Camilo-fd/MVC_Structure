@@ -16,7 +16,6 @@ router.put('/update/:id', updateUser);
 // Eliminar un usuario por ID
 router.delete('/:id', deleteUser);
 
-//TODO: JWT!
 router.post('/login', login);
 
 router.post('/signup', singUp(), validate, signup);

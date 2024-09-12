@@ -1,9 +1,7 @@
 const { Sequelize } = require('sequelize');
 
 try {
-  const sequelize = new Sequelize('mysql://root:axLOlsvPKyIhUljDWhdIrpaCWprcXhNs@junction.proxy.rlwy.net:18568/Camilo', {
-    logging: false // Desactiva el logging de SQL
-  });
+  const sequelize = new Sequelize(process.env.CONECTION_SQL, { logging: false });
   module.exports = sequelize;
 } catch (error) {
   console.error('Error al conectar a la base de datos:', error);

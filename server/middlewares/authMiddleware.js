@@ -1,20 +1,18 @@
-//TODO: JWT!
-
 const jwt = require('jsonwebtoken');
 const config = require('../../config');
 
 exports.verifyToken = (req, res, next) => {
-  const token = req.headers['x-access-token'] || req.headers['authorization'];
+  const token = req.cookies.authToken || req.headers['x-access-token'];
   
   if (!token) {
     return res.status(403).send({ message: "No token provided!" });
   }
 
-  jwt.verify(token.split(' ')[1], config.secret, (err, decoded) => {
+  jwt.verify(token, process.env.PASSPORD_SECRET, (err, decoded) => {
     if (err) {
       return res.status(401).send({ message: "Unauthorized!" });
     }
     req.userId = decoded.id;
     next();
   });
-};
+}

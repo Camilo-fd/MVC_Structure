@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');
 const { MongoUser, MySQLUser } = require('../models/JWT');
-const config = require('../../config');
 
 exports.login = async (req, res) => {
   try {
@@ -20,9 +19,9 @@ exports.login = async (req, res) => {
     // Si la autenticación es exitosa, buscar el usuario correspondiente en MySQL
     const mySQLUser = await MySQLUser.findOne({ where: { mongo_id: mongoUser._id.toString() } });
 
-    const token = jwt.sign({ id: mongoUser._id, sqlId: mySQLUser ? mySQLUser.cc : null }, config.secret, {
-      expiresIn: config.expiresIn
-    });
+    const token = jwt.sign({ id: mongoUser._id}, process.env.PASSPORD_SECRET, { expiresIn: process.env.TIME_EXPIRATION });
+    const time = parseInt(process.env.TIME_EXPIRATION, 10) * 1000
+    res.cookie('Token', token, { maxAge: time });
 
     res.status(200).send({
       id: mongoUser._id,

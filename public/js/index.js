@@ -18,8 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (response.ok) {
-                const data = await response.json();
-                localStorage.setItem('token', data.accessToken);
+                // const data = await response.json();
                 window.location.href = "/menu";
             } else {
                 const errorData = await response.json();

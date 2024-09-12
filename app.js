@@ -3,6 +3,7 @@ const connectDB = require('./server/database/connection/mongoDB');
 const connectSQL = require('./server/database/connection/sql')
 const userRoutes = require('./server/routes/userRoutes');   
 const path = require('path');
+const cookieParser = require('cookie-parser');
 require('dotenv').config();
 
 const app = express();
@@ -12,6 +13,7 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cookieParser());
 
 // Rutas
 app.use('/api/users', userRoutes);
