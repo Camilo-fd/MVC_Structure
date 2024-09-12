@@ -2,22 +2,17 @@ const express = require('express');
 const router = express.Router();
 const { userValidationRules, validate, singUp } = require('../validators/userValidator');
 const { createUser, getUser, updateUser, deleteUser} = require('../controllers/userController');
-const { login, signup } = require('../controllers/authController');
+const { loginV1, signupV1, loginV2 } = require('../controllers/authController');
 
-// Crear un usuario
 router.post('/create', userValidationRules(), validate, createUser);
-
-// Obtener un usuario por ID
 router.get('/:id', getUser);
-
-// Actualizar un usuario ID
 router.put('/update/:id', updateUser);
-
-// Eliminar un usuario por ID
 router.delete('/:id', deleteUser);
 
-router.post('/login', login);
+router.post('/login/v1', loginV1);
+router.post('/signup/v1', singUp(), validate, signupV1);
 
-router.post('/signup', singUp(), validate, signup);
+router.post('/login/v2', loginV2);
+router.post('/signup/v2', singUp(), validate, signupV1);
 
 module.exports = router;

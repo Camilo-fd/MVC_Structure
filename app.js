@@ -23,15 +23,8 @@ app.get("/menu", (req, res) => {
 
 const startServer = async () => {
   try {
-    // Conectar a MongoDB
     await connectDB();
-    console.log('Conexión exitosa a MongoDB');
-
-    // Conectar a SQL
     await connectSQL.sync();  // sync() asegura que las tablas existan
-    console.log('Conexión exitosa a SQLite/Sequelize');
-
-    // Iniciar el servidor después de conectar a ambas bases de datos
     app.listen(PORT, () => {
       console.log(`Server is running on http://localhost:${PORT}`);
     });

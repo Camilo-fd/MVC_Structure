@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
-const config = require('../../config');
 
-exports.verifyToken = (req, res, next) => {
+const verifyToken = (req, res, next) => {
   const token = req.cookies.authToken || req.headers['x-access-token'];
   
   if (!token) {
@@ -16,3 +15,4 @@ exports.verifyToken = (req, res, next) => {
     next();
   });
 }
+module.exports = verifyToken;
