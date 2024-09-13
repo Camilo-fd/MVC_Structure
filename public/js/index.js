@@ -9,10 +9,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const password = document.getElementById("password").value;
 
         try {
-            const response = await fetch('/api/users/login/v1', {
+            const response = await fetch('/api/users/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    "x-version": "1.0.0"
                 },
                 body: JSON.stringify({ name, password }),
             });
@@ -37,10 +38,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const password = document.getElementById("signupPassword").value;
 
         try {
-            const response = await fetch('/api/users/signup/v1', {
+            const response = await fetch('/api/users/signup', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    "x-version": "1.0.0"
                 },
                 body: JSON.stringify({ name, password }),
             });
