@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    "x-version": "1.0.0"
+                    "x-version": "1.1.0"
                 },
                 body: JSON.stringify({ name, password }),
             });
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    "x-version": "1.0.0"
+                    "x-version": "1.1.0"
                 },
                 body: JSON.stringify({ name, password }),
             });

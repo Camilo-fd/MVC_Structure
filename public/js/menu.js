@@ -46,7 +46,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch('/api/users/create', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    "x-version": "1.0.0"
                 },
                 body: JSON.stringify(data)
             });
@@ -70,7 +71,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const userId = document.getElementById('searchId').value;
         
         try {
-            const response = await fetch(`/api/users/${userId}`);
+            const response = await fetch(`/api/users/${userId}`, {
+                headers: {
+                    'x-version': '1.0.0'
+                }
+            });
             const result = await response.json();
             
             if (response.ok) {
@@ -99,7 +104,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch(`/api/users/update/${userId}`, {
                 method: 'PUT',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    "x-version": "1.0.0"
                 },
                 body: JSON.stringify(updatedData)
             });
@@ -124,7 +130,10 @@ document.addEventListener('DOMContentLoaded', () => {
         
         try {
             const response = await fetch(`/api/users/${userId}`, {
-                method: 'DELETE'
+                method: 'DELETE',
+                headers: {
+                    'x-version': '1.0.0'
+                }
             });
             
             const result = await response.json();

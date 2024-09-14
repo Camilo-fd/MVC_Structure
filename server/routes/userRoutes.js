@@ -10,9 +10,11 @@ router.get('/:id', versionMiddleware("1.0.0"),getUser);
 router.put('/update/:id', versionMiddleware("1.0.0"), updateUser);
 router.delete('/:id', versionMiddleware("1.0.0"), deleteUser);
 
+// Cookies
 router.post('/login', versionMiddleware("1.0.0"), loginV1);
 router.post('/signup', versionMiddleware("1.0.0"), singUp(), validate, signupV1);
 
+// Session
 router.post('/login', versionMiddleware("1.1.0"), loginV2);
 router.post('/signup', versionMiddleware("1.1.0"), singUp(), validate, signupV1);
 

@@ -2,8 +2,10 @@ const express = require('express');
 const connectDB = require('./server/database/connection/mongoDB');
 const connectSQL = require('./server/database/connection/sql')
 const userRoutes = require('./server/routes/userRoutes');   
+const sessionExpirationMiddleware = require('./server/middlewares/sessionExpiration');
 const path = require('path');
 const cookieParser = require('cookie-parser');
+const session = require('express-session');
 require('dotenv').config();
 
 const app = express();
@@ -15,11 +17,18 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cookieParser());
 
+app.use(session({
+  secret: process.env.PASSPORD_SECRET,
+  resave: false,
+  saveUninitialized: true,
+  cookie: { maxAge: 10000 }
+}));
+
 // Rutas
 app.use('/api/users', userRoutes);
-app.get("/menu", (req, res) => {
-  res.sendFile(`public/views/menu.html`, {root: __dirname})
-})
+app.get("/menu", sessionExpirationMiddleware, (req, res) => {
+  res.sendFile(`public/views/menu.html`, {root: __dirname});
+});
 
 const startServer = async () => {
   try {

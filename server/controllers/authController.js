@@ -1,6 +1,4 @@
-const jwt = require('jsonwebtoken');
 const { MongoUser, MySQLUser } = require('../models/JWT');
-const session = require('../middlewares/session')
 
 exports.loginV1 = async (req, res) => {
   try {
@@ -71,8 +69,10 @@ exports.loginV2 = async (req, res) => {
     const passwordIsValid = await mongoUser.comparePassword(password)
     if (!passwordIsValid) return res.status(401).send({ message: "Contraseña inválida!" });
 
-    const token = jwt.sign({ id: mongoUser._id }, process.env.PASSPORD_SECRET, { expiresIn: process.env.TIME_EXPIRATION } )
-    req.session = token
+    // Guardar información del usuario en la sesión
+    req.session.userName = mongoUser.name;
+
+    res.status(200).send({ name: mongoUser.name });
   } catch (error) {
     res.status(500).send({ message: error.message })
   }
